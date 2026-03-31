@@ -1,0 +1,11 @@
+# Vibe coding log (draft)
+
+I mostly built this Mini ViT project inside Cursor with the AI doing the edits, which was weirdly similar to pair programming except my “partner” never gets tired. I started from a vague assignment idea—“forward-only ViT, demo-friendly”—and the prompts that worked best were the ones that **split the problem**: first folder structure and `requirements.txt`, then `model.py` pieces, then a single `demo_forward.py` that I could actually run and screenshot. Whenever I said “minimal” or “no training loop,” the answers stayed smaller, which saved me from giant files I couldn’t explain in class.
+
+Some prompts were more effective than others. **Checklists worked** (“print shapes, save patch figure, save attention”) because the model could implement end-to-end behavior without me micromanaging tensor indices. **“Debugging pass”** style prompts also helped: I asked it to verify CLS vs positional embedding length and `MultiheadAttention` layout, and it caught the kind of off-by-one confusion I would have stared at for an hour. Less effective were super open questions like “make it nice”—those tended to sprawl. Narrow follow-ups (“use block 0 for figures,” “add `--seed` to the CLI”) got cleaner diffs.
+
+There were a few real debugging iterations worth mentioning. Early on, **torchvision** failed on my machine because of a missing `_lzma` module, so the demo had to fall back to **Pillow / procedural images** instead of assuming `FakeData` always imports. Another round was about **attention visualization**: we needed explicit `batch_first=True` and returned weights shaped like `(batch, heads, seq, seq)` so the heatmaps weren’t silently wrong. Later I asked for **`validate_project.py`**, which runs the demo in a temp folder and checks PNGs exist—that caught a filename mismatch once when the attention plots were renamed.
+
+Overall the process felt iterative: run script, see error or ugly figure, paste traceback or describe what’s wrong, get a patch, repeat. I’m still responsible for understanding what the code does, but having the AI apply the edits meant I could focus on *why* the shapes should be `(1, 65, 64)` instead of fighting typos. If I revise this log for the final submission, I’ll tighten the word count and add the exact rubric points my instructor cares about.
+
+*(Approx. 320 words.)*
